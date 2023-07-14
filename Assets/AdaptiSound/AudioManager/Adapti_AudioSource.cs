@@ -13,6 +13,15 @@ public class Adapti_AudioSource : MonoBehaviour
         audio_source.loop = true;
     }
 
+    public void stop_coroutine()
+    {
+        if (fade_coroutine != null)
+        {
+            // Detener la coroutine anterior si existe
+            StopCoroutine(fade_coroutine);
+        }
+    }
+
     public void StartFade(float duration, float targetVolume, bool fadeType, bool can_stop = true)
     {
         if (fade_coroutine != null)

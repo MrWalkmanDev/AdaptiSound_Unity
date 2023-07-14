@@ -43,7 +43,7 @@ public class AudioManager : MonoBehaviour
     private Dictionary<string, Adapti_AudioSource> BGS_audio_sources;       // BGS Audio Sources Dictionary
 
 
-    private string current_playback;                                        // Current Playback
+    [HideInInspector] public string current_playback;                       // Current Playback
 
 
     private void Awake() {
@@ -89,7 +89,7 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    public void play_music(string track_name, float volume = 1.0f, float fade_in = 0.0f, float fade_out = 0.0f)
+    public void play_music(string track_name, float volume = 1.0f, float fade_in = 0.0f, float fade_out = 0.0f, int loop_index = 0)
     {
         Adapti_AudioSource track = null;
         GameObject abgm_track = null;
@@ -155,7 +155,7 @@ public class AudioManager : MonoBehaviour
 
             // Play Audio //
             abgm_component.bus = abgm_bus;
-            abgm_component.on_play(fade_in, volume, true);
+            abgm_component.on_play(fade_in, volume, true, loop_index);
             current_playback = track_name;
             return;
         }
@@ -245,6 +245,36 @@ public class AudioManager : MonoBehaviour
         }*/
         return null;
     }
+
+
+
+    public void to_outro(string track_name, bool can_fade = false, float fade_out = 0.5f, float fade_in = 0.5f)
+    {
+        if (!can_fade)
+        {
+            fade_out = 0.0f;
+            fade_in = 0.0f;
+        }
+
+        if(!ABGM_audio_prefabs.ContainsKey(track_name))
+        {
+            print("warning", "Track not found");
+            return;
+        }
+
+        if (current_playback != track_name)
+        {
+            print("warning", "Track is not playing");
+            return;
+        }
+
+        GameObject track = add_abgm_track(track_name);
+        AdaptiNode abgm_component = track.GetComponent<AdaptiNode>();
+
+        abgm_component.on_outro(fade_out, fade_in);
+
+    }
+
 
 
     public void change_loop(string track_name, int loop_index, bool can_fade = false, float fade_out = 0.5f, float fade_in = 0.5f)
