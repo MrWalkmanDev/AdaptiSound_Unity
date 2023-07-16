@@ -199,51 +199,43 @@ public class AudioManager : MonoBehaviour
 
     public void reset_music(float fade_out = 0.0f, float fade_in = 0.0f)
     {   
-        /*if (current_playback != null)
-        {
-            if (fade_out != 0.0f)
-            {
-                current_playback.StartFade(fade_out, 0.0f, false);
-            }
-            else
-            {
-                current_playback.audio_source.Stop();
-            }
-
-            if (fade_in != 0.0f)
-            {
-                current_playback.StartFade(fade_in, current_playback.audio_source.volume, true);
-            }
-            else
-            {
-                current_playback.audio_source.Play();
-            }
-        }*/
+        
     }
 
 
-    public Adapti_AudioSource stop_music(bool can_fade = false, float fade_out = 1.5f)
+    public void stop_music(bool can_fade = false, float fade_out = 1.5f)
     {
-       /* Adapti_AudioSource track = current_playback;
-
         if (current_playback != null)
         {
-            if (can_fade)
+            GameObject container = get_container(current_playback);
+
+            if (container != abgm_container)
             {
-                current_playback.StartFade(fade_out, 0.0f, false);
+                Adapti_AudioSource track = get_bgm_track(current_playback);
+                if (can_fade)
+                {
+                    track.StartFade(fade_out, 0.0f, false);
+                }
+                else
+                {
+                    track.audio_source.Stop();
+                }
             }
             else
             {
-                current_playback.audio_source.Stop();
+                GameObject track = get_abgm_track(current_playback);
+                AdaptiNode adaptinode = track.GetComponent<AdaptiNode>();
+                adaptinode.on_stop(can_fade, fade_out);
             }
+
             current_playback = null;
-            return track;
+            return;
         }
         else
         {
-            return null;
-        }*/
-        return null;
+            print("log", "No track playing");
+            return;
+        }
     }
 
 
@@ -389,13 +381,35 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    /*public Adapti_AudioSource get_track(string track_name)
+    public Adapti_AudioSource get_bgm_track(string track_name)
     {
-
         GameObject container = get_container(track_name);
 
-        if (container.ContainsKey(track_name))
-    }*/
+        if (container == bgm_container)
+        {
+            Adapti_AudioSource track = BGM_audio_sources[track_name];
+            return track;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public GameObject get_abgm_track(string track_name)
+    {
+        GameObject container = get_container(track_name);
+
+        if (container == abgm_container)
+        {
+            GameObject track = GameObject.Find(track_name + "(Clone)");
+            return track;
+        }
+        else
+        {
+            return null;
+        }
+    }
 
 
     private GameObject get_container(string track_name)

@@ -464,8 +464,14 @@ public class AdaptiNode : MonoBehaviour
 
     public void on_stop(bool can_fade = false, float fade_out = 1.5f)
     {
-        StopCoroutine(intro_coroutine);
-        StopCoroutine(outro_coroutine);
+        if (intro_coroutine != null)
+        {
+            StopCoroutine(intro_coroutine);
+        }
+        if (outro_coroutine != null)
+        {
+            StopCoroutine(outro_coroutine);
+        }
 
         // Stop Intro //
         if (fade_out != 0.0f)
