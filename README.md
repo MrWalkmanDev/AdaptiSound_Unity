@@ -9,10 +9,10 @@ Your creativity is the limit!
 
 ## 🎛Documentation
 
-- [Features]()
+- [Features](https://github.com/MrWalkmanDev/AdaptiSound_Unity/blob/main/Assets/AdaptiSound/Documentation/Documentation.md)
 - [AdaptiSound Videos]()
 
 ### 📃Credits
 - Made by [Isaías Arrué R.](https://github.com/MrWalkmanDev) ( [Mr. Walkman](https://mr-walkman.itch.io) )
 
-[MIT License]()
+[MIT License](https://github.com/MrWalkmanDev/AdaptiSound_Unity/blob/main/LICENSE)
