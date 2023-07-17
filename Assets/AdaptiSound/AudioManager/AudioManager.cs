@@ -76,9 +76,23 @@ public class AudioManager : MonoBehaviour
         ABGM_audio_prefabs = new Dictionary<string, GameObject>();
         ABGM_audio_sources = new Dictionary<string, GameObject>();
 
-        file_browser(BGM_dir, "BGM");
-        file_browser(BGS_dir, "BGS");
-        abgm_file_browser();
+        if (BGM_dir != "")
+        {
+            file_browser(BGM_dir, "BGM");
+            abgm_file_browser();
+        }
+        else
+        {
+            print("warning", "BGM Directorie empty");
+        }
+        if (BGS_dir != "")
+        {
+            file_browser(BGS_dir, "BGS");
+        } 
+        else
+        {
+            print("warning", "BGS Directorie empty");
+        }
     }
 
 
@@ -113,7 +127,7 @@ public class AudioManager : MonoBehaviour
             }
 
             // Stop Current Playback //
-            if (current_playback != null)
+            if (current_playback != "")
             {
                 stop_current_playback(fade_out);
             }
@@ -148,7 +162,7 @@ public class AudioManager : MonoBehaviour
             }
 
             // Stop Current Playback //
-            if (current_playback != null)
+            if (current_playback != "")
             {
                 stop_current_playback(fade_out);
             }
@@ -205,7 +219,7 @@ public class AudioManager : MonoBehaviour
 
     public void stop_music(bool can_fade = false, float fade_out = 1.5f)
     {
-        if (current_playback != null)
+        if (current_playback != "")
         {
             GameObject container = get_container(current_playback);
 
@@ -228,7 +242,7 @@ public class AudioManager : MonoBehaviour
                 adaptinode.on_stop(can_fade, fade_out);
             }
 
-            current_playback = null;
+            current_playback = "";
             return;
         }
         else

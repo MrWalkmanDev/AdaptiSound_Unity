@@ -78,8 +78,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4031324fa6b1c47a380b83bb352914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BGM_dir: Assets/Resources/Audio
-  BGS_dir: Assets/Resources/Audio/BGS
+  BGM_dir: 
+  BGS_dir: 
   OGG: 1
   WAV: 1
   MP3: 0

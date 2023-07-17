@@ -520,7 +520,7 @@ public class AdaptiNode : MonoBehaviour
         }
         if (AudioManager.Instance.current_playback == objectName)
         {
-            AudioManager.Instance.current_playback = null;
+            AudioManager.Instance.current_playback = "";
         }
     }
 
