@@ -120,6 +120,7 @@ This method stops the current playback.
 
 ### `setSequence` 
 <sub>Only for ABGM</sub>
+
 ![Imgur](https://i.imgur.com/LZathb1.png)
 
 - `track_name:` type `String`, name of the track that will continue after the outro of the current track.
@@ -151,11 +152,18 @@ This method will play from the beginning the audio with the name assigned in *so
 *ABGS playback options not yet available.*
 
 
-## AdaptiNodes
+## AdaptiNode
 
-To add adaptive music to our project we can use the AdaptiNodes. The objective of these nodes is to create a single track that contains several audio tracks and a certain structure to be played.
+To add adaptive music to our project we can use the `AdaptiNode`. The objective of these script is to create a single track that contains several audio tracks and a certain structure to be played.
 
-### ParallelTrack & ParallelLayer
+First you need to go to the BGM directory and create a prefab in the folder you want. The name of this file will be the one you will use to call its playback.
+After creating the file, you must add the `AdaptiNode` script to the prefab.
+
+![Imgur](https://i.imgur.com/jFU12xt.png)
+
+In this example I created a track called Theme1.
+
+### AdaptiNode Inspector
 
 The main function of `ParallelTrack` is to play multiple tracks at the same time, and with methods called from `AudioManager` control the different layers.
 To get started, you'll need to add a `ParallelLayer` node to the parent node.
