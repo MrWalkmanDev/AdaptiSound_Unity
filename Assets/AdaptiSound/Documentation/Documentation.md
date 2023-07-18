@@ -5,157 +5,126 @@
 ![Imgur](https://i.imgur.com/g3MrD7S.png)
 - In `Resources` folder are the audio files with which the DEMO works.
 - The `AdaptiSound` folder contains the DEMO scenes, a mixer and the `AudioManager` folder, that contains all the scripts for this tool to work.
-**Note:** ***Adaptisound only needs the AudioManager folder to work, you can delete the DEMO and its resources if you want***
+
+**Note:** *Adaptisound only needs the AudioManager folder to work, you can delete the DEMO and its resources if you want*
 
 
-### `AudioManager Folder`
+### `AudioManager Prefab`
 ![Imgur](https://i.imgur.com/cyypkwT.png)
 
+![Imgur](https://i.imgur.com/qNAzFi7.png)
 
-
-
-![Imgur](https://i.imgur.com/ue4WQfU.png)
-
-In the inspector of `AudioManager` will help you organize the audio files in your project.
-You can separate the music into 3 different categories:
+This prefab is in charge of managing all the playback methods for BGM and BGS.
+The BGM, ABGM, and BGS objects are the containers for the audiosources that the tracks will play. They are separated into 3 categories:
 - `BGM` (Background Music)
 - `ABGM` (Adaptive Background Music)
 - `BGS` (Background Sounds)
 
+This prefab is a singleton, so you should only load it in your main scene
+
+## AudioManager InspectorPanel
+![Imgur](https://i.imgur.com/6CknjkF.png)
+
+The `AudioManager` inspector will help you organize the audio files in your project.
+
 ### **Audio Directories**
 
-![Imgur](https://i.imgur.com/GDCFHb8.png)
+You will need to assign a directory for each category (ABGM tracks include them in the BGM directory), `AudioManager` will search all subfolders for audio files with the extensions selected in **Extensions**.
 
-You will have to assign a directory for each category, `Main Panel` will look in all the subfolders for audio files with the extensions selected in **Audio Extensions**.
-With the *search* button you can view the files found in the directories.
+*`Note`: ABGM tracks must be created as prefabs. see `AdaptiNode` for more information.*
 
-*`Note`: ABGM will search only .tscn files, as it will use only the scenes created with AdaptiveTrack, or ParallelTrack*
-
-### **Audio Bus**
-
-![Imgur](https://i.imgur.com/eQ1QWgm.png)
+### **Audio Buses**
 
 Here you can assign an audio *BUS* for each category. This will help with later in-game audio volume management.
 
-### **Debug and ABGS Support**
+### **Debug**
 
-![Imgur](https://i.imgur.com/gtskvKC.png)
+- `Debugging`: You will be able to see the plugin's operation in the console.
 
-- `Debugging`: You will be able to see the plugin's operation in the output panel.
-- `ABGS Support`: It will allow you to add scenes with AdaptiveTrack or ParallelTrack nodes in the BGS category.
-
-## **Save Button** 
-you must use this button to save any changes you make in the main panel.
-![Imgur](https://i.imgur.com/pAEEVqe.png)
-
-
-## AudioManager Singleton
+## AudioManager Playback Methods
 
 This tool is designed with the objective of implementing global background music and/or sounds. `AudioManager` will only play a single `BGM` or `ABGM` track, and in parallel one of `BGS`.
 
 - The `current_playback` variable stores the only currently playing BGM or ABGM.
 - The `current_bgs_playback` variable stores the only current playback of the BGS.
 
-![Imgur](https://i.imgur.com/X41Xw0x.png)
+`Note:` *Remember to write the AdaptiSound namespace to use any of these methods*
 
-`AudioManager` will automatically preload audio files for when `playback methods` are called.
+![Imgur](https://i.imgur.com/B2fcZ75.png)
 
-*Only add_track method and play_music method add an instance to the `AudioManager` tree in the container with its category.*
-
-## Playback Methods
-
-### `play_music` 
+### `playMusic` 
 <sub>Only for BGM/ABGM</sub>
 
-![Imgur](https://i.imgur.com/isVC4CR.png)
+![Imgur](https://i.imgur.com/HR90Zza.png)
 
-This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
+This method will play from the beginning the audio with the name assigned in *track_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
-- `sound_name:` with this argument type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
-- `volume_db:` argument type `Float`, set volume in dB of the track when played. `0.0 default`
-- `fade_in:` argument type `Float`, set the fade time when the track is played. `0.5 default`
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
-- `skip_intro:` **only for AdaptiveTrack**, `Bool` if true, play the loop directly. `false default`
-- `loop_index:` **only for AdaptiveTrack**, `Int` sets the index of the loop to be played after the intro. `0 default`
+- `track_name:` type `String`, `AudioManager` will look for the preloaded sounds and play audio with this name.
+- `volume:` type `Float`, set volume in dB of the track when played. `0.0f default`
+- `fade_in:` type `Float`, set the fade time when the track is played. `0.5f default`
+- `fade_out:` type `Float`, set the fade time when the current playback out. `0.5f default`
+- `loop_index:` **only for AdaptiveTrack**, type `Int`, sets the index of the loop to be played after the intro. `0 default
 
 
-### `reset_music` 
+### `stopMusic` 
 <sub>Only for BGM/ABGM</sub>
 
-![Imgur](https://i.imgur.com/PvFIyCe.png)
-
-This method returns the currently playing track to the beginning.
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `0.0 default`
-- `fade_in:` argument type `Float`, set the fade time when the track is played. `0.0 default`
-
-
-### `stop_music` 
-<sub>Only for BGM/ABGM</sub>
-
-![Imgur](https://i.imgur.com/h5yE4sL.png)
+![Imgur](https://i.imgur.com/Fp8PoN2.png)
 
 This method stops the current playback.
-- `can_fade:` if true, apply fade_out on current playback track. `false default`
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
+- `can_fade:` type `Bool`, if true, apply fade_out on current playback track. `false default`
+- `fade_out:` type `Float`, set the fade time when the current playback out. `1.5f default`
 
 
-### `change_loop` 
+### `changeLoop` 
 <sub>Only for ABGM</sub>
 
-![Imgur](https://i.imgur.com/q8LL0bG.png)
+![Imgur](https://i.imgur.com/BixUb87.png)
 
-- `sound_name:` argument type `String`, name of the AdaptiveTrack on which the playing `Loop` will be changed.
-- `loop_by_index:` loop index to play.
-- `can_fade:` if true, tracks will change with fades. `false default`
-- `fade_in:` time of fade in. `0.5 default`
-- `fade_out:` time of fade out. `1.5 default`
+- `track_name:` type `String`, name of the track on which the playing `Loop` will be changed.
+- `loop_by_index:` type `Int`, loop index to play.
+- `can_fade:` type `Bool`, if true, tracks will change with fades. `false default`
+- `fade_out:` type `Float`, time of fade out. `0.5f default`
+- `fade_in:` type `Float`, time of fade in. `0.5f default`
 
-### `to_outro` 
+
+### `toOutro` 
 <sub>Only for ABGM</sub>
 
-![Imgur](https://i.imgur.com/Iqv62Hg.png)
+![Imgur](https://i.imgur.com/NA94TKK.png)
 
-- `sound_name:` argument type `String`, name of the AdaptiveTrack in which to switch to the `Outro`
-- `can_fade:` if true, tracks will change with fades. `false default`
-- `fade_out:` time of fade out. `1.5 default`
-- `fade_in:` time of fade in. `0.5 default`
+- `track_name:` type `String`, name of the AdaptiveTrack in which to switch to the `Outro`
+- `can_fade:` type `Bool`, if true, tracks will change with fades. `false default`
+- `fade_out:` type `Float`, time of fade out. `0.5f default`
+- `fade_in:` type `Float`, time of fade in. `0.5f default`
 
 
-### `layer_on` 
+### `muteLayer` 
 <sub>Only for ABGM</sub>
 
-![Imgur](https://i.imgur.com/G42Roq9.png)
+![Imgur](https://i.imgur.com/k76EyuC.png)
 
-- `track_name:` argument type `String`, name of ParallelTrack on which a layer will be played.
-- `layer_names:` type `Array`, names, groups, or indexes of the layers to be heard.
-- `fade_time:` time of fade in. `2.0 default`
+- `track_name:` type `String`, name of the track to mute or unmute for a specific layer.
+- `layer:` type `Int`, target layer index.
+- `mute_state:` type `Bool`, select to mute or unmute the asigned layer.
+- `fade_time:` type `Float`, time of fade. `1.5f default`
 
-### `layer_off` 
+### `muteAllLayer` 
 <sub>Only for ABGM</sub>
 
-![Imgur](https://i.imgur.com/SolmYzZ.png)
+![Imgur](https://i.imgur.com/5R9btkS.png)
 
-- `track_name:` argument type `String`, name of ParallelTrack on which to stop listening to a layer
-- `layer_names:` type `Array`, names, groups, or indices of the layers to be unheard.
-- `fade_time:` time of fade in. `3.0 default`
+- `track_name:` type `String`, name of the track on which to set all its layers to mute or unmute.
+- `mute_state:` type `Bool`, select to mute or unmute all layers.
+- `fade_time:` type `Float`, time of fade. `1.5f default`
 
-### `play_layer`
+### `setSequence` 
 <sub>Only for ABGM</sub>
+![Imgur](https://i.imgur.com/LZathb1.png)
 
-![Imgur](https://i.imgur.com/Fmz0ZTI.png)
+- `track_name:` type `String`, name of the track that will continue after the outro of the current track.
 
-- `track_name:` argument type `String`, name of the track that contains the layers to play.
-- `layer_names:` type `Array`, names, groups, or indices of trigger layers to play.
-- `can_fade:` if true, tracks will play with fade in. `false default`
-- `fade_time:` time of fade in. `3.0 default`
-
-### `stop_layer`
-<sub>Only for ABGM</sub>
-
-- `track_name:` argument type `String`, name of the track that contains the layers to stop.
-- `layer_names:` type `Array`, names, groups, or indices of trigger layers to stop.
-- `can_fade:` if true, tracks will play with fade out. `false default`
-- `fade_time:` time of fade out. `3.0 default`
+`Note:`*only available for tracks with outro.*
 
 ### `stop_all` 
 <sub>For All</sub>
