@@ -118,6 +118,10 @@ This method stops the current playback.
 - `mute_state:` type `Bool`, select to mute or unmute all layers.
 - `fade_time:` type `Float`, time of fade. `1.5f default`
 
+### `muteLayerByName`
+<sub>Only for ABGM</sub>
+*This playback option not yet available.*
+
 ### `setSequence` 
 <sub>Only for ABGM</sub>
 
