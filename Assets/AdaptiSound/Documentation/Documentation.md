@@ -182,44 +182,24 @@ Now to configure our adaptive track we open the prefab and we will find the foll
 - `measure_count:` if true, the console will print the track's bar count.
 - `loops:` To add a loop you will need to follow some additional steps:
 
-![Imgur](https://i.imgur.com/uWZlERb.png)
+![Imgur](https://i.imgur.com/PckjoNV.png)
 
+You can add multiple loops on the same track, but only **one** can be played at a time.
+In each loop you can add **multiple layers**, and in this way create a loop with **parallel tracks**.
 
+For each layer we have the following properties:
 
-`ParallelLayer` has the following properties:
+- `clip:` here you add the audio file that will be activated with this layer.
+- `layer_name:` set a name for the layer, this will be used for the `muteLayerByName` method.
+- `mute:` defines if this layer will be muted when playing the main track.
 
-- `playing_type:` if `Always`, will play when calling `play_music`, and it will always be activated unless stopped with `stop_music`, if `Trigger` it will only be activated when calling the `play_layer` method.
+The objective of this structure is for all layers to play in parallel, and with the `muteLayer`, `muteAllLayer` or `muteLayerByName` methods we control their listening.
 
-Note: `Always` plays from the start, but it won't necessarily be listening. for is the `layer_on` property.
+To continue, the following parameters allow the track's `beat count` and measure operation.
+This feature will allow us to change loops, or change to the outro synchronously with the tempo of the music.
 
-- `audio_stream:` here you add the audio tracks that will be activated with this layer.
-- `layer_on:` if true, then the layer will be listenning from the beginning, when called by `play_music`.
-- `loop:` if true, the layer will play in a loop.
-- `Groups:` you can assign custom groups to each layer, and then call them with the `layer_on` or `layer_off` function.
-
-![Imgur](https://i.imgur.com/Ka5jHfO.png)
-
-The objective of this structure is that all the layers of type `Always` are playing in parallel, and with the `layer_on` and `layer_off` methods we activate or deactivate them respectively to be heard.
-
-
-### AdaptiveTrack
-
-
-![Imgur](https://i.imgur.com/Hq85fNJ.png)
-
-Loops are resources of `BaseAudioTrack` class, you can create a new one as seen in the image above.
-
-- `audio_file:` here you must add the audio file that will be played in a loop
-- `track_name:` give the loop a name
-- `BPM:` beat per minute from track
-- `metric:` is the number of beats within a measure/bar
-
-The loops have a beat and bar counting system. The following properties make use of this feature.
-- `total_beat_count:` is the total number of beats that the loop has. ***You must have this data to make the beats and bars counter work***
-
-(An easy way to get it is to multiply the total number of bars x metric)
-
-- `keys_loop_in_measure:` in this property you can assign keys to specific measures/bar, when the `change_loop` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***.
-- `keys_end_in_measure:` in this property you can assign keys to specific measures/bar, when the `to_outro` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***.
-
-If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
+- `BPM:` beat per minute from track.
+- `metric:` is the number of beats within a measure/bar.
+- `total_beat_count:` is the total number of beats that the loop has. ***You must have this data to make the beats and bars counter work*** (An easy way to get it is to multiply the total number of bars x metric).
+- `keys_loop_measure:` in this property you can assign keys to specific measures/bar, when the `changeLoop` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***. If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
+- `keys_to_outro_measure:` in this property you can assign keys to specific measures/bar, when the `toOutro` method is called the track will be changed ***only when the track enters one of these keys(measures/bar)***. If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
