@@ -4,6 +4,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Collections;
 
+namespace AdaptiSound
+{
+
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
@@ -44,6 +47,7 @@ public class AudioManager : MonoBehaviour
 
 
     [HideInInspector] public string current_playback;                       // Current Playback
+    [HideInInspector] public string current_bgs_playback;
 
 
     private void Awake() {
@@ -78,8 +82,15 @@ public class AudioManager : MonoBehaviour
 
         if (BGM_dir != "")
         {
-            file_browser(BGM_dir, "BGM");
-            abgm_file_browser();
+            if (BGM_dir.Contains("Assets/Resources"))
+            {
+                file_browser(BGM_dir, "BGM");
+                abgm_file_browser();
+            }
+            else
+            {
+                print("warning", "The directory should be in Assets/Resources/");
+            }
         }
         else
         {
@@ -87,7 +98,14 @@ public class AudioManager : MonoBehaviour
         }
         if (BGS_dir != "")
         {
-            file_browser(BGS_dir, "BGS");
+            if (BGS_dir.Contains("Assets/Resources"))
+            {
+                file_browser(BGS_dir, "BGS");
+            }
+            else
+            {
+                print("warning", "The directory should be in Assets/Resources/");
+            }
         } 
         else
         {
@@ -103,7 +121,7 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    public void play_music(string track_name, float volume = 1.0f, float fade_in = 0.0f, float fade_out = 0.0f, int loop_index = 0)
+    public void playMusic(string track_name, float volume = 1.0f, float fade_in = 0.5f, float fade_out = 0.5f, int loop_index = 0)
     {
         Adapti_AudioSource track = null;
         GameObject abgm_track = null;
@@ -211,13 +229,13 @@ public class AudioManager : MonoBehaviour
 
 
 
-    public void reset_music(float fade_out = 0.0f, float fade_in = 0.0f)
+    public void resetMusic(float fade_out = 0.0f, float fade_in = 0.0f)
     {   
         
     }
 
 
-    public void stop_music(bool can_fade = false, float fade_out = 1.5f)
+    public void stopMusic(bool can_fade = false, float fade_out = 1.5f)
     {
         if (current_playback != "")
         {
@@ -237,8 +255,7 @@ public class AudioManager : MonoBehaviour
             }
             else
             {
-                GameObject track = get_abgm_track(current_playback);
-                AdaptiNode adaptinode = track.GetComponent<AdaptiNode>();
+                AdaptiNode adaptinode = get_abgm_track(current_playback);
                 adaptinode.on_stop(can_fade, fade_out);
             }
 
@@ -254,7 +271,7 @@ public class AudioManager : MonoBehaviour
 
 
 
-    public void to_outro(string track_name, bool can_fade = false, float fade_out = 0.5f, float fade_in = 0.5f)
+    public void toOutro(string track_name, bool can_fade = false, float fade_out = 0.5f, float fade_in = 0.5f)
     {
         if (!can_fade)
         {
@@ -278,12 +295,32 @@ public class AudioManager : MonoBehaviour
         AdaptiNode abgm_component = track.GetComponent<AdaptiNode>();
 
         abgm_component.on_outro(fade_out, fade_in);
+    }
 
+
+    public void setSequence(string track_name)
+    {
+        if (current_playback == "")
+        {
+            print("warning", "No current track to assign sequence");
+            return;
+        }
+
+        if(!ABGM_audio_prefabs.ContainsKey(current_playback))
+        {
+            print("warning", "Current track is not ABGM, set secuence only be set in ABGM tracks");
+            return;
+        }
+
+        GameObject track = add_abgm_track(current_playback);
+        AdaptiNode abgm_component = track.GetComponent<AdaptiNode>();
+
+        abgm_component.set_sequence(track_name);
     }
 
 
 
-    public void change_loop(string track_name, int loop_index, bool can_fade = false, float fade_out = 0.5f, float fade_in = 0.5f)
+    public void changeLoop(string track_name, int loop_index, bool can_fade = false, float fade_out = 0.5f, float fade_in = 0.5f)
     {
         if (can_fade == false)
         {
@@ -310,8 +347,28 @@ public class AudioManager : MonoBehaviour
     }
 
 
+    public void muteAllLayer(string track_name, bool mute_state, float fade_time = 1.5f)
+    {
+        if(!ABGM_audio_prefabs.ContainsKey(track_name))
+        {
+            print("warning", "Track not found");
+            return;
+        }
 
-    public void mute_layer(string track_name, int layer, float fade_time, bool fade_type)
+        if (current_playback != track_name)
+        {
+            print("warning", "Track is not playing");
+            return;
+        }
+
+        GameObject track = add_abgm_track(track_name);
+        AdaptiNode abgm_component = track.GetComponent<AdaptiNode>();
+
+        abgm_component.mute_all_layer(fade_time, mute_state);
+    }
+
+
+    public void muteLayer(string track_name, int layer, bool mute_state, float fade_time = 1.5f)
     {
 
         if(!ABGM_audio_prefabs.ContainsKey(track_name))
@@ -329,7 +386,7 @@ public class AudioManager : MonoBehaviour
         GameObject track = add_abgm_track(track_name);
         AdaptiNode abgm_component = track.GetComponent<AdaptiNode>();
 
-        abgm_component.mute_layer(layer, fade_time, fade_type);
+        abgm_component.mute_layer(layer, fade_time, mute_state);
 
     }
 
@@ -410,14 +467,20 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public GameObject get_abgm_track(string track_name)
+    public AdaptiNode get_abgm_track(string track_name)
     {
         GameObject container = get_container(track_name);
 
         if (container == abgm_container)
         {
             GameObject track = GameObject.Find(track_name + "(Clone)");
-            return track;
+            if (track == null)
+            {
+                print("warning", "Track is not in the scene");
+                return null;
+            }
+            AdaptiNode abgm_component = track.GetComponent<AdaptiNode>();
+            return abgm_component;
         }
         else
         {
@@ -559,4 +622,5 @@ public class AudioManager : MonoBehaviour
     }
 }
 
+}
 

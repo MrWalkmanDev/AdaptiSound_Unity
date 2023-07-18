@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+namespace AdaptiSound
+{
+
 public class Adapti_AudioSource : MonoBehaviour
 {
 
@@ -60,4 +63,6 @@ public class Adapti_AudioSource : MonoBehaviour
         }
         yield break;
     }
+}
+
 }
