@@ -120,6 +120,7 @@ This method stops the current playback.
 
 ### `muteLayerByName`
 <sub>Only for ABGM</sub>
+
 *This playback option not yet available.*
 
 ### `setSequence` 
