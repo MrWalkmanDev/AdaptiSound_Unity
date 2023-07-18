@@ -163,20 +163,28 @@ After creating the file, you must add the `AdaptiNode` script to the prefab.
 
 In this example I created a track called Theme1.
 
-### AdaptiNode Inspector
+### Track Settings
 
-The main function of `ParallelTrack` is to play multiple tracks at the same time, and with methods called from `AudioManager` control the different layers.
-To get started, you'll need to add a `ParallelLayer` node to the parent node.
+The main function of `AdaptiNode` is to reproduce the following structure:
 
-![Imgur](https://i.imgur.com/Otz3qC7.png)
+| Intro | Loops | Outro |
+| ----- | ----- | ----- |
+- `Intro:` It is a track that plays only once, and can only be stopped with a track change (`playMusic`), or with the `stopMusic` method.
+- `Loops:` These tracks will play in a loop, but only one track will play at a time, to change from one loop to another you must call the `changeLoop` method.
+- `Outro:` This track will play only once, and can only be interrupted by `stopMusic` method or a track change (`playMusic`). to go from the loops section to the outro you must call `toOutro` method.
 
-You can rename the layers so that later it is easier to manage them. Each ParallelLayer can contain multiple tracks, and all tracks will play together when the layer they belong to is activated.
+Now to configure our adaptive track we open the prefab and we will find the following properties:
 
-For example we can have the following structure:
-- (ParallelLayer)Base: contains drum and bass tracks
-- (ParallelLayer)Top: contains melodic tracks
+![Imgur](https://i.imgur.com/NnrO6lE.png)
 
-![Imgur](https://i.imgur.com/vkvvqmN.png)
+- `intro_clip:` here you must add the audio file that is played as `Intro`. if you leave this field empty, the track will play from the `Loop` section.
+- `outro_clip:` here you must add the audio file that is played as `Outro`. you can leave this field empty and just call `stopMusic` method.
+- `measure_count:` if true, the console will print the track's bar count.
+- `loops:` To add a loop you will need to follow some additional steps:
+
+![Imgur](https://i.imgur.com/uWZlERb.png)
+
+
 
 `ParallelLayer` has the following properties:
 
@@ -196,20 +204,6 @@ The objective of this structure is that all the layers of type `Always` are play
 
 ### AdaptiveTrack
 
-The main function of `AdaptiveTrack` is to reproduce the following structure:
-
-| Intro | Loops | Outro |
-| ----- | ----- | ----- |
-- `Intro:` It is a track that plays only once, and can only be stopped with a track change (`play_music`), or with the `stop_music` method.
-- `Loops:` These tracks will play in a loop, but only one track will play at a time, to change from one loop to another you must call the `change_loop` method.
-- `Outro:` This track will play only once, and can only be interrupted by the `change_loop`, or `stop_music` method. to go from the loops section to the outro you must call `to_outro` method.
-
-![Imgur](https://i.imgur.com/5av3yLb.png)
-
-AdaptiveTrack properties
-- `intro_file:` here you must add the audio file that will be played as `Intro`. you can leave it empty and playback will start directly with the first loop.
-- `outro_file:`  here you need to add the audio file to be played as `Outro`. You can leave it empty and the playback will stop when calling `to_outro` method.
-- `loops_files:` To add a loop you will need to follow some additional steps:
 
 ![Imgur](https://i.imgur.com/Hq85fNJ.png)
 
