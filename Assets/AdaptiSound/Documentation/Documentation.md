@@ -149,7 +149,7 @@ This method stops all currently playing BGM/ABGM and BGS tracks, and removes the
 
 This method will play from the beginning the audio with the name assigned in *track_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
-*Same as play_music*
+*Same as playMusic*
 
 *Use `stopAll("BGS")` for stop sounds*
 
