@@ -78,8 +78,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d4031324fa6b1c47a380b83bb352914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BGM_dir: 
-  BGS_dir: 
+  BGM_dir: Audio/BGM
+  ABGM_dir: Audio/ABGM
+  BGS_dir: Audio/BGS
   OGG: 1
   WAV: 1
   MP3: 0
@@ -88,6 +89,7 @@ MonoBehaviour:
   bgs_bus: {fileID: 8835222272941047409, guid: f20de37ac2f6c714ba3279168598b470, type: 2}
   Debugging: 1
   current_playback: 
+  current_bgs_playback: 
 --- !u!1 &8177937740802127263
 GameObject:
   m_ObjectHideFlags: 0

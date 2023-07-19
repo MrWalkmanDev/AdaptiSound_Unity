@@ -366,7 +366,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8177937740282083207, guid: aed6b74d6d8d9b14dadf84dd70c5bdeb, type: 3}
       propertyPath: BGM_dir
-      value: Assets/Resources/Audio
+      value: AdaptiSoundDEMO
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177937740282083207, guid: aed6b74d6d8d9b14dadf84dd70c5bdeb, type: 3}
+      propertyPath: BGS_dir
+      value: Audio
+      objectReference: {fileID: 0}
+    - target: {fileID: 8177937740282083207, guid: aed6b74d6d8d9b14dadf84dd70c5bdeb, type: 3}
+      propertyPath: ABGM_dir
+      value: AdaptiSoundDEMO
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aed6b74d6d8d9b14dadf84dd70c5bdeb, type: 3}

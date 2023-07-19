@@ -145,7 +145,7 @@ public class AdaptiNode : MonoBehaviour
                 {
                     total_song_position_in_beat += 1;
                 }*/
-                //Debug.Log(total_song_position_in_beat);
+                //Debug.Log(song_position_in_beats);
                 beat_report(loop_index);
             }
         }

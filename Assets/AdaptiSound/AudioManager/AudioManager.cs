@@ -10,10 +10,14 @@ namespace AdaptiSound
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
-   
+    
+
     [Header("Audio Directories")]                                           // Directories
-    [Tooltip("Assign BGM Directorie")]
-    [SerializeField] private string BGM_dir = "";        
+    [Tooltip("Assign BGM Directorie in Assets/Resources folder")]
+    [SerializeField] private string BGM_dir = "";    
+    [Tooltip("Assign ABGS Directorie in Assets/Resources folder")]
+    [SerializeField] private string ABGM_dir = "";   
+    [Tooltip("Assign BGS Directorie in Assets/Resources folder")]
     [SerializeField] private string BGS_dir = "";                    
     
     [Header("Extensions")]                                                  // Extensions
@@ -79,45 +83,10 @@ public class AudioManager : MonoBehaviour
         BGM_audio_sources = new Dictionary<string, Adapti_AudioSource>();
         ABGM_audio_prefabs = new Dictionary<string, GameObject>();
         ABGM_audio_sources = new Dictionary<string, GameObject>();
+        BGS_audio_clips = new Dictionary<string, AudioClip>();
+        BGS_audio_sources = new Dictionary<string, Adapti_AudioSource>();
 
-        if (BGM_dir != "")
-        {
-            if (BGM_dir.Contains("Assets/Resources"))
-            {
-                file_browser(BGM_dir, "BGM");
-                abgm_file_browser();
-            }
-            else
-            {
-                print("warning", "The directory should be in Assets/Resources/");
-            }
-        }
-        else
-        {
-            print("warning", "BGM Directorie empty");
-        }
-        if (BGS_dir != "")
-        {
-            if (BGS_dir.Contains("Assets/Resources"))
-            {
-                file_browser(BGS_dir, "BGS");
-            }
-            else
-            {
-                print("warning", "The directory should be in Assets/Resources/");
-            }
-        } 
-        else
-        {
-            print("warning", "BGS Directorie empty");
-        }
-    }
-
-
-
-    void Start()
-    {
-
+        file_browser();
     }
 
 
@@ -569,30 +538,22 @@ public class AudioManager : MonoBehaviour
 
     
 
-    private void add_clip_dictionary(string audioClipPath, string type)
+    private void add_clip_dictionary(AudioClip audioClip, string type)
     {
-        AudioClip clip = (AudioClip) Resources.Load(audioClipPath);
-        // Set KeyName //
-        string file_name = Path.GetFileNameWithoutExtension(audioClipPath);
-
         if ( type == "BGM")
         {
-            BGM_audio_clips[file_name] = clip;
+            BGM_audio_clips[audioClip.name] = audioClip;
         }
         if ( type == "BGS")
         {
-            BGS_audio_clips[file_name] = clip;
+            BGS_audio_clips[audioClip.name] = audioClip;
         }
         
     }
 
-    private void add_prefab_dictionary(string abgmPath)
+    private void add_prefab_dictionary(GameObject abgmPrefab)
     {
-        GameObject clip = (GameObject) Resources.Load(abgmPath);
-        // Set KeyName //
-        string file_name = Path.GetFileNameWithoutExtension(abgmPath);
-        //Debug.Log(clip);
-        ABGM_audio_prefabs[file_name] = clip;
+        ABGM_audio_prefabs[abgmPrefab.name] = abgmPrefab;
     }
 
 
@@ -712,43 +673,48 @@ public class AudioManager : MonoBehaviour
 
 
     // File Browser //
-    void file_browser(string path, string type)
+    void file_browser()
     {
-        foreach (string extension in fileExtensions)
+        // BGM //
+        AudioClip[] audioClips = Resources.LoadAll<AudioClip>(BGM_dir);
+
+        if (audioClips.Length == 0)
         {
-            string[] files = Directory.GetFiles(path, "*" + extension, SearchOption.AllDirectories);
-
-            if (files.Length == 0)
-            {
-                //print("warning", "No files in path " + path + " with extension " + extension);
-            }
-
-            foreach (string file in files)
-            {
-                string audioClipPath = file.Replace("Assets/Resources/", "");
-                string final_path = audioClipPath.Replace("." + extension, "");
-                add_clip_dictionary(final_path, type);
-            }
+            print("log", "No files in BGM Directory");
         }
+
+        foreach (AudioClip audioClip in audioClips)
+        {
+            add_clip_dictionary(audioClip, "BGM");
+        }
+
+        // ABGM //
+        GameObject[] prefabs = Resources.LoadAll<GameObject>(ABGM_dir);
+
+        if (prefabs.Length == 0)
+        {
+            print("log", "No files in ABGM Directory");
+        }
+
+        foreach (GameObject file in prefabs)
+        {
+            add_prefab_dictionary(file);
+        }
+
+        // BGS //
+        AudioClip[] bgs_audioClips = Resources.LoadAll<AudioClip>(BGS_dir);
+
+        if (bgs_audioClips.Length == 0)
+        {
+            print("log", "No files in BGS Directory");
+        }
+
+        foreach (AudioClip audioClip in bgs_audioClips)
+        {
+            add_clip_dictionary(audioClip, "BGS");
+        }
+
     }
-
-    void abgm_file_browser()
-    {
-        string[] files = Directory.GetFiles(BGM_dir, "*" + "prefab", SearchOption.AllDirectories);
-
-        if (files.Length == 0)
-        {
-            //print("warning", "No files in path " + BGM_dir + " with extension " + "prefab");
-        }
-
-        foreach (string file in files)
-        {
-            string audioClipPath = file.Replace("Assets/Resources/", "");
-            string final_path = audioClipPath.Replace("." + "prefab", "");
-            add_prefab_dictionary(final_path);
-        }
-    }
-
 
     // Audio Files Extensions //
     private string[] set_extensions()
