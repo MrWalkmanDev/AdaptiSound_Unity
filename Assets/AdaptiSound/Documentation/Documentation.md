@@ -1,10 +1,9 @@
 # Documentation
 
 ## Files
-![Imgur](https://i.imgur.com/JYsvFK4.png)
-![Imgur](https://i.imgur.com/g3MrD7S.png)
-- In `Resources` folder are the audio files with which the DEMO works.
+![Imgur](https://i.imgur.com/hMaIGbr.png)
 - The `AdaptiSound` folder contains the DEMO scenes, a mixer and the `AudioManager` folder, that contains all the scripts for this tool to work.
+- If you want to try the DEMO, you will have to move the `Resources` folder to the root of Assets.
 
 **Note:** *Adaptisound only needs the AudioManager folder to work, you can delete the DEMO and its resources if you want*
 
