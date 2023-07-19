@@ -31,7 +31,9 @@ The `AudioManager` inspector will help you organize the audio files in your proj
 
 You will need to assign a directory for each category (ABGM tracks include them in the BGM directory), `AudioManager` will search all subfolders for audio files with the extensions selected in **Extensions**.
 
-*`Note`: ABGM tracks must be created as prefabs. see `AdaptiNode` for more information.*
+*`Note1`: ABGM tracks must be created as prefabs. see `AdaptiNode` for more information.*
+
+*`Note2`: The directories should be inside the Resources folder in Assets.*
 
 ### **Audio Buses**
 
