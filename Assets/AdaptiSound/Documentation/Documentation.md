@@ -132,28 +132,26 @@ This method stops the current playback.
 
 `Note:`*only available for tracks with outro.*
 
-### `stop_all` 
+### `stopAll` 
 <sub>For All</sub>
 
 ![Imgur](https://i.imgur.com/R4focq7.png)
 
 This method stops all currently playing BGM/ABGM and BGS tracks, and removes them from the tree.
-- `tracks_category:` type `String`, set a specific category you want to stop. `"all" default`
+- `tracks_category:` type `String`, set a specific category you want to stop. `"ALL" default` (Use "BGM" or "BGS").
 - `fade_time:` type `Float`, set the fade time of current playback. `0.5f default`
 
 
-### `play_sound`
+### `playSound`
 <sub>Only for BGS</sub>
 
 ![Imgur](https://i.imgur.com/kIG8pXO.png)
 
-This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
+This method will play from the beginning the audio with the name assigned in *track_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
 *Same as play_music*
 
-*Use `stop_all("BGS")` for stop sounds*
-
-*ABGS playback options not yet available.*
+*Use `stopAll("BGS")` for stop sounds*
 
 
 ## AdaptiNode
