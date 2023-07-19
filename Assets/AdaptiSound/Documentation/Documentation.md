@@ -208,3 +208,27 @@ This feature will allow us to change loops, or change to the outro synchronously
 - `total_beat_count:` is the total number of beats that the loop has. ***You must have this data to make the beats and bars counter work*** (An easy way to get it is to multiply the total number of bars x metric).
 - `keys_loop_measure:` in this property you can assign keys to specific measures/bar, when the `changeLoop` method is called the track will be changed `only when the track enters one of these keys(measures/bar)`. If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
 - `keys_to_outro_measure:` in this property you can assign keys to specific measures/bar, when the `toOutro` method is called the track will be changed `only when the track enters one of these keys(measures/bar)`. If the above properties are not defined, then the track will instantly switch to another loop, or the outro.
+
+## Other Methods
+
+### get_bgm_track
+![Imgur](https://i.imgur.com/g6TEJIT.png)
+
+- `track_name:` type `String`, track name to get, return `Adapti_Source`.
+
+### get_abgm_track
+![Imgur](https://i.imgur.com/rH6XGOC.png)
+
+- `track_name:` type `String`, track name to get, return `AdaptiNode`.
+### get_bgs_track
+![Imgur](https://i.imgur.com/ex60TCR.png)
+
+- `track_name:` type `String`, track name to get, return `Adapti_Source`.
+
+### removeTrack
+![Imgur](https://i.imgur.com/SMWZE00.png)
+
+- `track_name:` type `String`, name of the track which to remove from the scene.
+Remove track instance and component.
+
+
