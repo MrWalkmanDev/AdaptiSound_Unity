@@ -214,7 +214,7 @@ This feature will allow us to change loops, or change to the outro synchronously
 ### get_bgm_track
 ![Imgur](https://i.imgur.com/g6TEJIT.png)
 
-- `track_name:` type `String`, track name to get, return `Adapti_Source`.
+- `track_name:` type `String`, track name to get, return `Adapti_AudioSource`.
 
 ### get_abgm_track
 ![Imgur](https://i.imgur.com/rH6XGOC.png)
@@ -223,7 +223,7 @@ This feature will allow us to change loops, or change to the outro synchronously
 ### get_bgs_track
 ![Imgur](https://i.imgur.com/ex60TCR.png)
 
-- `track_name:` type `String`, track name to get, return `Adapti_Source`.
+- `track_name:` type `String`, track name to get, return `Adapti_AudioSource`.
 
 ### removeTrack
 ![Imgur](https://i.imgur.com/SMWZE00.png)
