@@ -9,7 +9,7 @@ Your creativity is the limit!
 
 ## 🎛Documentation
 
-- [Features](https://github.com/MrWalkmanDev/AdaptiSound_Unity/blob/main/Assets/AdaptiSound/Documentation/Documentation.md)
+- [Features](https://github.com/MrWalkmanDev/AdaptiSound_Unity/blob/main/Documentation/Documentation.md)
 - [AdaptiSound Videos](https://www.youtube.com/watch?v=xKpfNbXDovc&list=PLYgswNf3dEHULkqZ7FkGxGXSiCUsGOX19)
 
 ### 📃Credits
