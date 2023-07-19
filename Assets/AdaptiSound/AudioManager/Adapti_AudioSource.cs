@@ -16,6 +16,12 @@ public class Adapti_AudioSource : MonoBehaviour
         audio_source.loop = true;
     }
 
+    public void removeTrack()
+    {
+        Destroy(audio_source);
+        Destroy(this, 0.0f);
+    }
+
     public void stop_coroutine()
     {
         if (fade_coroutine != null)

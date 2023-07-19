@@ -218,7 +218,7 @@ public class AudioManager : MonoBehaviour
 
             if (fade_out != 0.0f)
             {
-                adaptinode.on_stop(true, fade_out);
+                adaptinode.on_stop(fade_out);
             }
             else
             {
@@ -231,7 +231,7 @@ public class AudioManager : MonoBehaviour
 
     public void resetMusic(float fade_out = 0.0f, float fade_in = 0.0f)
     {   
-        
+        print("log", "resetMusic not available yet");
     }
 
 
@@ -256,7 +256,11 @@ public class AudioManager : MonoBehaviour
             else
             {
                 AdaptiNode adaptinode = get_abgm_track(current_playback);
-                adaptinode.on_stop(can_fade, fade_out);
+                if (can_fade == false)
+                {
+                    fade_out = 0.0f;
+                }
+                adaptinode.on_stop(fade_out);
             }
 
             current_playback = "";
@@ -391,12 +395,133 @@ public class AudioManager : MonoBehaviour
     }
 
 
+
+    public void stopAll(string tracks_category = "ALL", float fade_time = 0.5f)
+    {
+        if (tracks_category == "BGM" || tracks_category == "ABGM")
+        {
+            foreach (AdaptiNode tracks in abgm_container.GetComponentsInChildren<AdaptiNode>())
+            {
+                tracks.on_stop(fade_time);
+            }
+
+            foreach (Adapti_AudioSource tracks in bgm_container.GetComponents<Adapti_AudioSource>())
+            {
+                if (fade_time != 0.0f)
+                {
+                    tracks.StartFade(fade_time, 0.0f, false);
+                }
+                else
+                {
+                    tracks.audio_source.Stop();
+                }
+            }
+
+            current_playback = "";
+        } 
+        if (tracks_category == "BGS")
+        {
+            foreach (Adapti_AudioSource tracks in bgs_container.GetComponents<Adapti_AudioSource>())
+            {
+                if (fade_time != 0.0f)
+                {
+                    tracks.StartFade(fade_time, 0.0f, false);
+                }
+                else
+                {
+                    tracks.audio_source.Stop();
+                }
+            }
+            current_bgs_playback = "";
+        }
+        else
+        {
+            foreach (AdaptiNode tracks in abgm_container.GetComponentsInChildren<AdaptiNode>())
+            {
+                tracks.on_stop(fade_time);
+            }
+
+            foreach (Adapti_AudioSource tracks in bgm_container.GetComponents<Adapti_AudioSource>())
+            {
+                if (fade_time != 0.0f)
+                {
+                    tracks.StartFade(fade_time, 0.0f, false);
+                }
+                else
+                {
+                    tracks.audio_source.Stop();
+                }
+            }
+
+            foreach (Adapti_AudioSource tracks in bgs_container.GetComponents<Adapti_AudioSource>())
+            {
+                if (fade_time != 0.0f)
+                {
+                    tracks.StartFade(fade_time, 0.0f, false);
+                }
+                else
+                {
+                    tracks.audio_source.Stop();
+                }
+            }
+            current_playback = "";
+            current_bgs_playback = "";
+        }
+    }
+
+
+    public void playSound(string track_name, float volume = 1.0f, float fade_in = 0.5f, float fade_out = 0.5f)
+    {
+        Adapti_AudioSource track = null;
+        //GameObject abgm_track = null;
+
+        GameObject container = get_container(track_name);
+        if (container == null)
+        {
+            print("warning", "Track not found");
+            return;
+        }
+
+        // BGS //
+        if (container == bgs_container)
+        {
+            track = add_bgs_track(track_name);
+
+            if (current_bgs_playback == track_name)
+            {
+                print("warning", "Track alredy playing");
+                return;
+            }
+
+            // Stop Current Playback //
+            if (current_bgs_playback != "")
+            {
+                stop_current_playback(fade_out);
+            }
+
+            // Play Audio //
+            if (fade_in != 0.0f)
+            {
+                track.StartFade(fade_in, volume, true);
+            }
+            else
+            {
+                track.StartFade(fade_in, volume, true);
+                track.audio_source.volume = volume;
+            }
+            track.audio_source.Play();
+            current_bgs_playback = track_name;
+            return;
+        }
+    }
+
+
+
     private Adapti_AudioSource add_bgm_track(string track_name)
     {
         if (!BGM_audio_sources.ContainsKey(track_name))
         {
             Adapti_AudioSource bgm_audio = bgm_container.AddComponent<Adapti_AudioSource>();
-            //bgm_audio.audio_source = bgm_container.AddComponent<AudioSource>();
             bgm_audio.audio_source.clip = BGM_audio_clips[track_name];                  
             BGM_audio_sources[track_name] = bgm_audio;
             return bgm_audio;
@@ -424,7 +549,26 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+
+    // BGS //
+    private Adapti_AudioSource add_bgs_track(string track_name)
+    {
+        if (!BGS_audio_sources.ContainsKey(track_name))
+        {
+            Adapti_AudioSource bgs_audio = bgs_container.AddComponent<Adapti_AudioSource>();
+            bgs_audio.audio_source.clip = BGS_audio_clips[track_name];                  
+            BGS_audio_sources[track_name] = bgs_audio;
+            return bgs_audio;
+        }
+        else
+        {
+            Adapti_AudioSource bgs_audio = BGS_audio_sources[track_name];
+            return bgs_audio;
+        }
+    }
+
     
+
     private void add_clip_dictionary(string audioClipPath, string type)
     {
         AudioClip clip = (AudioClip) Resources.Load(audioClipPath);
@@ -449,6 +593,47 @@ public class AudioManager : MonoBehaviour
         string file_name = Path.GetFileNameWithoutExtension(abgmPath);
         //Debug.Log(clip);
         ABGM_audio_prefabs[file_name] = clip;
+    }
+
+
+    public void removeTrack(string track_name)
+    {
+        GameObject container = get_container(track_name);
+        
+        if (container == bgm_container)
+        {
+            if (!BGM_audio_sources.ContainsKey(track_name))
+            {
+                return;
+            }
+            BGM_audio_sources[track_name].removeTrack();
+            BGM_audio_sources.Remove(track_name);
+            current_playback = "";
+        }
+
+        if (container == abgm_container)
+        {
+            if (!ABGM_audio_sources.ContainsKey(track_name))
+            {
+                return;
+            }
+            AdaptiNode track = ABGM_audio_sources[track_name].GetComponent<AdaptiNode>();
+            track.removeTrack();
+            Destroy(ABGM_audio_sources[track_name]);
+            ABGM_audio_sources.Remove(track_name);
+            current_playback = "";
+        }
+
+        if (container == bgs_container)
+        {
+            if (!BGS_audio_sources.ContainsKey(track_name))
+            {
+                return;
+            }
+            BGS_audio_sources[track_name].removeTrack();
+            BGS_audio_sources.Remove(track_name);
+            current_bgs_playback = "";
+        }
     }
 
 
@@ -481,6 +666,22 @@ public class AudioManager : MonoBehaviour
             }
             AdaptiNode abgm_component = track.GetComponent<AdaptiNode>();
             return abgm_component;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    public Adapti_AudioSource get_bgs_track(string track_name)
+    {
+        GameObject container = get_container(track_name);
+
+        if (container == bgs_container)
+        {
+            Adapti_AudioSource track = BGS_audio_sources[track_name];
+            return track;
         }
         else
         {

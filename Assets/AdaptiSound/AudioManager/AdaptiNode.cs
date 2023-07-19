@@ -544,7 +544,7 @@ public class AdaptiNode : MonoBehaviour
 
 
 
-    public void on_stop(bool can_fade = false, float fade_out = 1.5f)
+    public void on_stop(float fade_out = 1.5f)
     {
         if (intro_coroutine != null)
         {
@@ -624,6 +624,32 @@ public class AdaptiNode : MonoBehaviour
     {
         can_sequence = true;
         sequence_track_name = track_name;
+    }
+
+
+
+    public void removeTrack()
+    {
+        if (intro_source != null)
+        {
+            intro_source.removeTrack();
+        }
+
+        foreach (KeyValuePair<int, Adapti_AudioSource[]> entry in loops_sources)
+        {
+            foreach (Adapti_AudioSource source in loops_sources[entry.Key])
+            {
+                source.removeTrack();
+            }
+        }
+
+        if (outro_source != null)
+        {
+            outro_source.removeTrack();
+        }
+
+        current_playback = null;
+        Destroy(this, 0.0f);
     }
 
 
