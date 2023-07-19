@@ -135,18 +135,17 @@ This method stops the current playback.
 ### `stop_all` 
 <sub>For All</sub>
 
-![Imgur](https://i.imgur.com/sKLJbHk.png)
+![Imgur](https://i.imgur.com/R4focq7.png)
 
 This method stops all currently playing BGM/ABGM and BGS tracks, and removes them from the tree.
-- `type:` argument type `String`, set a specific category you want to stop. `"all" default`
-- `fade_out:` argument type `Float`, set the fade time when the current playback out. `1.5 default`
-- `can_destroy:` if true, all tracks removes from the tree. `true default`
+- `tracks_category:` type `String`, set a specific category you want to stop. `"all" default`
+- `fade_time:` type `Float`, set the fade time of current playback. `0.5f default`
 
 
 ### `play_sound`
 <sub>Only for BGS</sub>
 
-![Imgur](https://i.imgur.com/r7e01zW.png)
+![Imgur](https://i.imgur.com/kIG8pXO.png)
 
 This method will play from the beginning the audio with the name assigned in *sound_name*. If there is already an audio being played, it will replace it, unless it is the same one, in which case, it will continue the current playback.
 
